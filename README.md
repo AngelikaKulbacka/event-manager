@@ -1,7 +1,7 @@
-API, które będzie umożliwiało operacje na eventach ( operacje, które zachodzą w całym systemie).  
+# API, które będzie umożliwiało operacje na eventach ( operacje, które zachodzą w całym systemie).  
 
 
-1.
+# 1.
 Wyświetlenie listy eventów:  
 http://127.0.0.1:8000/events/
 
@@ -16,7 +16,7 @@ Dodawanie nowych jest obsługiwane za pomocą Postmana w którego wpisujemy przy
 oraz pzrzed tym dodajemy w Headers KEY: Content-Type, VALUE: application/json.  
 
  
-2.
+# 2.
 # Pobierz wszystkie eventy  
 query {  
   events {  
