@@ -121,6 +121,6 @@ http://127.0.0.1:8000/graphql?query={events(name: "User created", description_Is
 
 # Dodaj nowy event
 Aby zrobić to w Postmanie:
-1.Wyślij żądanie GET do dowolnego endpointu, aby otrzymać token CSRF. Znajdziesz go w ciasteczkach jako "csrftoken".
-2.Skopiuj wartość csrftoken z ciasteczka.
-3.W żądaniu POST dodaj nagłówek o nazwie "X-CSRFToken" i wartości wcześniej skopiowanego tokena.
+1.Wyślij żądanie GET do dowolnego endpointu, aby otrzymać token CSRF. Znajdziesz go w ciasteczkach jako "csrftoken".  
+2.Skopiuj wartość csrftoken z ciasteczka.  
+3.W żądaniu POST dodaj nagłówek o nazwie "X-CSRFToken" i wartości wcześniej skopiowanego tokena.  
