@@ -1,35 +1,57 @@
 import graphene
+from graphene import relay
 from graphene_django import DjangoObjectType
+from graphene_django.filter import DjangoFilterConnectionField
+from django.utils import timezone
+from graphql import GraphQLError
+from django_filters import FilterSet, OrderingFilter
 from .models import Event
 
 
 class EventType(DjangoObjectType):
     class Meta:
         model = Event
-        fields = '__all__'
+        filter_fields = {
+            'name': ['exact', 'icontains', 'istartswith'],
+            'uuid': ['exact', 'icontains', 'istartswith'],
+            'source': ['exact', 'icontains', 'istartswith'],
+            'description': ['exact', 'icontains', 'istartswith'],
+        }
+        interfaces = (relay.Node,)
+
+
+class EventFilter(FilterSet):
+    class Meta:
+        model = Event
+        fields = {
+            'name': ['exact', 'icontains', 'istartswith'],
+            'uuid': ['exact', 'icontains', 'istartswith'],
+            'source': ['exact', 'icontains', 'istartswith'],
+            'description': ['exact', 'icontains', 'istartswith'],
+        }
+    order_by = OrderingFilter(
+        fields=(
+            ('name', 'created_at'),
+        )
+    )
 
 
 class Query(graphene.ObjectType):
-    events = graphene.List(
-        EventType,
-        name_contains=graphene.String(),
-        source_contains=graphene.String()
-    )
-    event = graphene.Field(EventType, event_uuid=graphene.UUID(required=True))
+    event = relay.Node.Field(EventType)
+    events = DjangoFilterConnectionField(EventType, filterset_class=EventFilter)
+    event_by_uuid = graphene.Field(EventType, uuid=graphene.UUID(required=True))
 
-    def resolve_events(self, info, name_contains=None, source_contains=None):
-        qs = Event.objects.all()
-        if name_contains:
-            qs = qs.filter(name__icontains=name_contains)
-        if source_contains:
-            qs = qs.filter(source__icontains=source_contains)
-        return qs
+    def resolve_events(self, info, order_by=None, **kwargs):
+        events = Event.objects.all()
+        if order_by:
+            events = events.order_by(*order_by)
+        return events
 
-    def resolve_event(self, info, event_uuid):
+    def resolve_event_by_uuid(self, info, uuid):
         try:
-            return Event.objects.get(uuid=event_uuid)
+            return Event.objects.get(uuid=uuid)
         except Event.DoesNotExist:
-            return None
+            return GraphQLError(f"Event with uuid {uuid} does not exist.")
 
 
 class EventInput(graphene.InputObjectType):
@@ -45,6 +67,13 @@ class CreateEvent(graphene.Mutation):
     event = graphene.Field(EventType)
 
     def mutate(self, info, input):
+        if not input.name:
+            raise GraphQLError("Event name is required.")
+        if not input.source:
+            raise GraphQLError("Event source is required.")
+        if not input.description:
+            raise GraphQLError("Event description is required.")
+
         event = Event(name=input.name, source=input.source, description=input.description)
         event.save()
         return CreateEvent(event=event)
@@ -63,6 +92,7 @@ class UpdateEvent(graphene.Mutation):
             event.name = input.name
             event.source = input.source
             event.description = input.description
+            event.updated_at = timezone.now()
             event.save()
             return UpdateEvent(event=event)
         except Event.DoesNotExist:
