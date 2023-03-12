@@ -15,7 +15,7 @@ Dodawanie nowych jest obsługiwane za pomocą Postmana w którego wpisujemy przy
 
 oraz pzrzed tym dodajemy w Headers KEY: Content-Type, VALUE: application/json.
 
-
+ 
 2.
 # Pobierz wszystkie eventy
 query {
