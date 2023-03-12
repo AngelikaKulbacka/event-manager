@@ -18,7 +18,7 @@ oraz pzrzed tym dodajemy w Headers KEY: Content-Type, VALUE: application/json.
  
 2.
 # Pobierz wszystkie eventy
-query {
+query {  
   events {
     name
     uuid
