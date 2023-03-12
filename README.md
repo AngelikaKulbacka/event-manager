@@ -20,51 +20,103 @@ oraz pzrzed tym dodajemy w Headers KEY: Content-Type, VALUE: application/json.
 # Pobierz wszystkie eventy  
 query {  
   events {  
-    name  
-    uuid  
-    source  
-    createdAt  
-    updatedAt  
-    description  
-  }  
-}  
+    edges {  
+        node {  
+            name  
+            uuid  
+            source  
+            createdAt  
+            updatedAt  
+            description  
+            }  
+        }  
+    }
+}
 
 Link:  
-http://127.0.0.1:8000/graphql?query={events{name, uuid, source, createdAt, updatedAt, description}}
+http://127.0.0.1:8000/graphql?query={events{edges{node{name, uuid, source, createdAt, updatedAt, description}}}}  
 
 
-(Zostały dodane dwa rodzaje filtrowania)
+# Pobierz wszystkie eventy, w których name jest równe "Ania created"
+query {  
+  events(name: "Ania created") {  
+    edges {  
+        node {  
+            name  
+            uuid  
+            source  
+            createdAt  
+            updatedAt  
+            description  
+            }  
+        }  
+    }
+} 
+
+Link:  
+http://127.0.0.1:8000/graphql?query={events(name: "Ania created"){edges{node{name, uuid, source, createdAt, updatedAt, description}}}}  
+
 
 # Pobierz wszystkie eventy, w których name zawiera słowo "User"  
 query {  
-  event(nameContains: "User") {  
-    id  
-    name  
-    source  
-    createdAt  
-    updatedAt  
-    description  
-  }  
-}  
+  events(name_Icontains: "User") {  
+    edges {  
+        node {  
+            name  
+            uuid  
+            source  
+            createdAt  
+            updatedAt  
+            description  
+            }  
+        }  
+    }
+} 
 
 Link:  
-http://127.0.0.1:8000/graphql?query=query{events(nameContains: "User"){id name source createdAt updatedAt description}}
+http://127.0.0.1:8000/graphql?query={events(name_Icontains: "User"){edges{node{name, uuid, source, createdAt, updatedAt, description}}}}  
 
 
-# Pobierz eventy o podanym source
-Link:  
-http://127.0.0.1:8000/graphql?query=query{events(sourceContains: "admins"){id name source createdAt updatedAt description}}
-
+# Pobierz eventy, w których source zaczyna się literą "a"
 query {  
-  event(sourceContains: "admins") {  
-    id  
-    name  
-    source  
-    createdAt  
-    updatedAt  
-    description  
-  }  
-}  
+  events(source_Istartswith: "a") {  
+    edges {  
+        node {  
+            name  
+            uuid  
+            source  
+            createdAt  
+            updatedAt  
+            description  
+            }  
+        }  
+    }
+} 
+
+
+Link:  
+http://127.0.0.1:8000/graphql?query={events(source_Istartswith: "a"){edges{node{name, uuid, source, createdAt, updatedAt, description}}}}  
+
+
+# Pobierz eventy, w których name jest równy "User created" i description zaczyna się literą "D"
+query {  
+  events(name: "User created", description_Istartswith: "D") {  
+    edges {  
+        node {  
+            name  
+            uuid  
+            source  
+            createdAt  
+            updatedAt  
+            description  
+            }  
+        }  
+    }
+} 
+
+
+Link:  
+http://127.0.0.1:8000/graphql?query={events(name: "User created", description_Istartswith: "D"){edges{node{name, uuid, source, createdAt, updatedAt, description}}}}  
 
 
 # Dodaj nowy event
@@ -77,16 +129,3 @@ mutation {
     }  
   }  
 }  
-
-
-# Zapytanie z filtrowaniem po polu name, które zwraca wszystkie eventy, których nazwa zaczyna się od litery "U"
-query {  
-  events(name_Istartswith: "U") {  
-    name  
-    source  
-    created_at  
-    updated_at  
-    description  
-  }  
-}  
-
