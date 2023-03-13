@@ -197,3 +197,6 @@ http://127.0.0.1:8000/graphql?query={eventByUuid(uuid: "66ae47bd-d4f3-40aa-b7ba-
 
 
 
+
+# Czas na zadanie
+Punkt numer 1 i 2 zajęły mi weekend zaczynając od piątku popołudnia i kończąc na poniedziałkowym poranku. Szybciej bym skończyła, niestety pare godzin siedzialam nad naprawieniem błędu z sortowaniem po datach.
