@@ -45,7 +45,7 @@ class Group(DjangoObjectType):
       model = Event
       interfaces = (relay.Node,)
 
-  def resolve_users(self, info, **kwargs):
+  def resolve_events(self, info, **kwargs):
     return EventFilter(kwargs).qs
 
 
