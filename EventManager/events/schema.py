@@ -31,9 +31,22 @@ class EventFilter(FilterSet):
         }
     order_by = OrderingFilter(
         fields=(
-            ('name', 'created_at'),
+            ('created_at'),
+            ('updated_at'),
         )
     )
+
+
+class Group(DjangoObjectType):
+  events = DjangoFilterConnectionField(EventType, filterset_class=EventFilter)
+
+  class Meta:
+      name = 'Group'
+      model = Event
+      interfaces = (relay.Node,)
+
+  def resolve_users(self, info, **kwargs):
+    return EventFilter(kwargs).qs
 
 
 class Query(graphene.ObjectType):
@@ -41,11 +54,11 @@ class Query(graphene.ObjectType):
     events = DjangoFilterConnectionField(EventType, filterset_class=EventFilter)
     event_by_uuid = graphene.Field(EventType, uuid=graphene.UUID(required=True))
 
-    def resolve_events(self, info, order_by=None, **kwargs):
-        events = Event.objects.all()
-        if order_by:
-            events = events.order_by(*order_by)
-        return events
+    # def resolve_events(self, info, order_by=None, **kwargs):
+    #     events = Event.objects.all()
+    #     if order_by:
+    #         events = events.order_by(*order_by)
+    #     return events
 
     def resolve_event_by_uuid(self, info, uuid):
         try:
