@@ -166,9 +166,24 @@ Link:
 http://127.0.0.1:8000/graphql?query={events(name: "User created", description_Istartswith: "D"){edges{node{name, uuid, source, createdAt, updatedAt, description}}}}  
 
 
-# Posortuj eventy rosnąco
+# Posortuj eventy rosnąco po "created_at"
 Link:  
 http://127.0.0.1:8000/graphql?query={events(orderBy: "created_at"){edges{node{name, uuid, source, createdAt, updatedAt, description}}}}
+
+
+# Posortuj eventy malejąco po "created_at"
+Link:  
+http://127.0.0.1:8000/graphql?query={events(orderBy: "-created_at"){edges{node{name, uuid, source, createdAt, updatedAt, description}}}}
+
+
+# Posortuj eventy rosnąco po "updated_at"
+Link:  
+http://127.0.0.1:8000/graphql?query={events(orderBy: "updated_at"){edges{node{name, uuid, source, createdAt, updatedAt, description}}}}
+
+
+# Posortuj eventy malejąco po "updated_at"
+Link:  
+http://127.0.0.1:8000/graphql?query={events(orderBy: "-updated_at"){edges{node{name, uuid, source, createdAt, updatedAt, description}}}}
 
 
 # Pobieranie konkretnego eventu gdzie argumentem jest “event_uuid”
