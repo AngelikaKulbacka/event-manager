@@ -5,7 +5,7 @@ wpisujemy w konsoli w projekcie:
 python manage.py runserver  
 
 
-# 1.
+# 1. Django API
 Wyświetlenie listy eventów:  
 http://127.0.0.1:8000/events/
 
@@ -20,7 +20,7 @@ Dodawanie nowych jest obsługiwane za pomocą Postmana w którego wpisujemy przy
 oraz pzrzed tym dodajemy w Headers KEY: Content-Type, VALUE: application/json.  
 
  
-# 2.
+# 2. GraphQL
 # Pobierz wszystkie eventy  
 query {  
   events {  
@@ -194,6 +194,21 @@ http://127.0.0.1:8000/graphql?query={eventByUuid(uuid: "67ae47bd-d4f3-40aa-b7ba-
 # Obsługa błędu w przypadku, gdy nie znajdzie eventu po danym uuid
 Link:  
 http://127.0.0.1:8000/graphql?query={eventByUuid(uuid: "66ae47bd-d4f3-40aa-b7ba-990759a27a6d"){name, source, description}}
+
+
+# 3. Apache Kafka
+Uruchamiamy terminal w rozpakowanym folderze kafka. Wpisujemy to:  
+.\bin\windows\zookeeper-server-start.bat .\config\zookeeper.properties  
+
+Otwieramy drugi terminal w tym samym miejscu i wpisujemy następującą komendę:  
+.\bin\windows\kafka-server-start.bat .\config\server.properties  
+
+W trzecim terminalu utworzony został nowy topic o nazwie 'events':  
+.\bin\windows\kafka-topics.bat --create --topic events --bootstrap-server localhost:9092  
+
+Uruchomienie producenta Kafka, który będzie wysyłał wiadomości do tematu 'events':  
+.\bin\windows\kafka-console-producer.bat --topic events --bootstrap-server localhost:9092  
+
 
 
 
